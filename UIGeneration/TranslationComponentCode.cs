@@ -1,0 +1,28 @@
+﻿
+	ngOnDestroy() {
+		this.subscriptions.forEach(s => s.unsubscribe());
+	}
+
+	get availableInputMatchFunctionDropdownOptions(): IDropdownOption[] {
+		return this.availableInputMatchFunctions.map(
+			fx => new DropdownOption((<number>fx).toString(), InputMatchFunction[fx]));
+	}
+
+	get availableTranslationFunctionDropdownOptions(): IDropdownOption[] {
+		return this.availableTranslationFunctions.map(
+			fx => new DropdownOption((<number>fx).toString(), TranslationFunction[fx]));
+	}
+
+	get inputMatchFunctionDropdownOption(): IDropdownOption {
+		return new DropdownOption((<number>this.translation.inputMatchFunction).toString(), InputMatchFunction[this.translation.inputMatchFunction]);
+	}
+	set inputMatchFunctionDropdownOption(value: IDropdownOption) {
+		this.translation.inputMatchFunction = parseInt(value.value);
+	}
+
+	get translationFunctionDropdownOption(): IDropdownOption {
+		return new DropdownOption((<number>this.translation.inputMatchFunction).toString(), InputMatchFunction[this.translation.inputMatchFunction]);
+	}
+	set translationFunctionDropdownOption(value: IDropdownOption) {
+		this.translation.translationFunction = parseInt(value.value);
+	}
