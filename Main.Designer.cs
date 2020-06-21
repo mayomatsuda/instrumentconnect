@@ -210,6 +210,7 @@
             this.e1 = new System.Windows.Forms.PictureBox();
             this.c1 = new System.Windows.Forms.PictureBox();
             this.refresh = new System.Windows.Forms.Button();
+            this.offlineLabel = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bb1m)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.a1m)).BeginInit();
@@ -2194,11 +2195,23 @@
             this.refresh.UseVisualStyleBackColor = true;
             this.refresh.Click += new System.EventHandler(this.refresh_Click);
             // 
+            // offlineLabel
+            // 
+            this.offlineLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.offlineLabel.Location = new System.Drawing.Point(583, 464);
+            this.offlineLabel.Name = "offlineLabel";
+            this.offlineLabel.Size = new System.Drawing.Size(196, 31);
+            this.offlineLabel.TabIndex = 191;
+            this.offlineLabel.Text = "Server offline";
+            this.offlineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.offlineLabel.Visible = false;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1446, 709);
+            this.Controls.Add(this.offlineLabel);
             this.Controls.Add(this.refresh);
             this.Controls.Add(this.midiText);
             this.Controls.Add(this.bb1m);
@@ -2385,6 +2398,7 @@
             this.MinimumSize = new System.Drawing.Size(1468, 765);
             this.Name = "Main";
             this.Text = "Instrument Connect";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
@@ -2752,6 +2766,7 @@
         private System.Windows.Forms.ToolStripMenuItem options;
         private System.Windows.Forms.ToolStripMenuItem connect;
         private System.Windows.Forms.Button refresh;
+        private System.Windows.Forms.Label offlineLabel;
     }
 }
 

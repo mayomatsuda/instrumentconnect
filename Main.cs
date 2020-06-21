@@ -20,6 +20,11 @@ namespace Instrument_Connect
         private string computerId;
         private string ipString;
         private string peerIP = "";
+        private int pauseTime = 100;
+        private bool offline = false;
+
+        private string ip;
+        private int port;
 
         public Main()
         {
@@ -56,14 +61,25 @@ namespace Instrument_Connect
             string time = DateTime.Now.ToString("hmmss");
             computerId = ipString.Substring(6, 4) + time;
 
-            clientSocket.Connect("192.168.2.187", 8000);
-            serverStream = clientSocket.GetStream();
-            byte[] outStream = Encoding.ASCII.GetBytes(ipString);
-            serverStream.Write(outStream, 0, outStream.Length);
-            serverStream.Flush();
+            try
+            {
+                clientSocket.Connect(ip, port);
+                serverStream = clientSocket.GetStream();
+                byte[] outStream = Encoding.ASCII.GetBytes(ipString);
+                serverStream.Write(outStream, 0, outStream.Length);
+                serverStream.Flush();
+            }
+            catch
+            {
+                offline = true;
+                offlineLabel.Visible = true;
+            }
 
-            _socketThread = new Thread(Receive);
-            _socketThread.Start();
+            if (!(offline))
+            {
+                _socketThread = new Thread(Receive);
+                _socketThread.Start();
+            }
         }
 
         private void Receive()
@@ -112,10 +128,6 @@ namespace Instrument_Connect
         {
             if (m)
             {
-                byte[] message = Encoding.ASCII.GetBytes(note + "_p " + computerId + " " + ipString + "-");
-                serverStream.Write(message, 0, message.Length);
-                serverStream.Flush();
-
                 if (note == "21") a1m.Image = Properties.Resources.red;
                 if (note == "22") bb1m.Image = Properties.Resources.blackred;
                 if (note == "23") b1m.Image = Properties.Resources.red;
@@ -204,6 +216,14 @@ namespace Instrument_Connect
                 if (note == "106") bb8m.Image = Properties.Resources.blackred;
                 if (note == "107") b8m.Image = Properties.Resources.red;
                 if (note == "108") c8m.Image = Properties.Resources.red;
+
+                byte[] message = Encoding.ASCII.GetBytes(note + "_p " + computerId + " " + ipString + "-");
+                if (!(offline))
+                { 
+                    serverStream.Write(message, 0, message.Length);
+                    serverStream.Flush();
+                    Thread.Sleep(pauseTime);
+                }
             }
             else
             {
@@ -302,10 +322,6 @@ namespace Instrument_Connect
         {
             if (m)
             {
-                byte[] message = Encoding.ASCII.GetBytes(note + "_r " + computerId + " " + ipString + "-");
-                serverStream.Write(message, 0, message.Length);
-                serverStream.Flush();
-
                 if (note == "21") a1m.Image = Properties.Resources.fl;
                 if (note == "22") bb1m.Image = Properties.Resources.blackkeys;
                 if (note == "23") b1m.Image = Properties.Resources.fl;
@@ -394,6 +410,14 @@ namespace Instrument_Connect
                 if (note == "106") bb8m.Image = Properties.Resources.blackkeys;
                 if (note == "107") b8m.Image = Properties.Resources.fl;
                 if (note == "108") c8m.Image = Properties.Resources.fl;
+
+                if (!(offline))
+                {
+                    byte[] message = Encoding.ASCII.GetBytes(note + "_r " + computerId + " " + ipString + "-");
+                    serverStream.Write(message, 0, message.Length);
+                    serverStream.Flush();
+                    Thread.Sleep(pauseTime);
+                }
             }
             else
             {
@@ -512,6 +536,17 @@ namespace Instrument_Connect
             {
                 if (ex.Message.Equals("A device ID has been used that is out of range for your system.")) midiText.Text = "No MIDI device detected";
             }
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                piano.StopRecording();
+                piano.Close();
+                _socketThread.Abort();
+            }
+            catch { }
         }
     }
 }
