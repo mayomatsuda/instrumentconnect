@@ -6,6 +6,6 @@
 * Window adaptability to work intuitively with Skype, Zoom, etc.
 
 ### Dependencies:
-* .NET
 * Sanford's MIDI Handler (from [NuGet](https://www.nuget.org/packages/Sanford.Multimedia.Midi/))
+* [The server](https://github.com/mayomatsuda/instrumentconnect_server)
 * For running a server, [ngrok](https://ngrok.com/) is an ideal port forwarding alternative
