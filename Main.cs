@@ -23,8 +23,8 @@ namespace Instrument_Connect
         private int pauseTime = 100;
         private bool offline = false;
 
-        private string ip;
-        private int port;
+        private string ip;  // This should be set to Server's IP address
+        private int port;   // This should be set to Server's port
 
         public Main()
         {
